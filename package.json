@@ -1,14 +1,1 @@
-{
-  "name": "punjabiai",
-  "version": "1.0.0",
-  "description": "Punjabi AI Assistant",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.0"
-  }
-}
+"openai": "^4.0.0"
