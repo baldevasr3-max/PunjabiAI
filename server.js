@@ -12,7 +12,7 @@ app.post("/api/chat", async (req, res) => {
 
     if (!message) {
       return res.status(400).json({
-        reply: "ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਸਵਾਲ ਲਿਖੋ ਜੀ।"
+        reply: "ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਸੁਨੇਹਾ ਲਿਖੋ ਜੀ।"
       });
     }
 
@@ -30,7 +30,7 @@ app.post("/api/chat", async (req, res) => {
             {
               role: "system",
               content:
-                "ਤੁਸੀਂ PunjabiAI Assistant ਹੋ। ਹਮੇਸ਼ਾ ਮਦਦਗਾਰ, ਸਪੱਸ਼ਟ ਅਤੇ ਸੁਰੱਖਿਅਤ ਜਵਾਬ ਦਿਓ। ਜੇ ਯੂਜ਼ਰ ਪੰਜਾਬੀ ਵਿੱਚ ਪੁੱਛੇ ਤਾਂ ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਦਿਓ।"
+                "ਤੁਸੀਂ PunjabiAI Assistant ਹੋ। ਹਮੇਸ਼ਾ ਸਧਾਰਨ ਪੰਜਾਬੀ ਵਿੱਚ ਮਦਦਗਾਰ ਜਵਾਬ ਦਿਓ।"
             },
             {
               role: "user",
@@ -43,11 +43,11 @@ app.post("/api/chat", async (req, res) => {
 
     const data = await response.json();
 
-    console.log("OpenAI response:", data);
-
     if (!response.ok) {
-      return res.status(response.status).json({
-        reply: data.error?.message || "AI API Error ਆ ਗਿਆ ਜੀ।"
+      console.error("OpenAI Error:", data);
+
+      return res.status(500).json({
+        reply: "AI server ਨਾਲ connection ਵਿੱਚ ਸਮੱਸਿਆ ਆ ਗਈ।"
       });
     }
 
@@ -56,18 +56,14 @@ app.post("/api/chat", async (req, res) => {
     });
 
   } catch (error) {
-
     console.error("Server Error:", error);
 
     res.status(500).json({
-      reply: "ਮਾਫ ਕਰਨਾ ਜੀ, Server ਵਿੱਚ ਸਮੱਸਿਆ ਆ ਗਈ।"
+      reply: "Server ਵਿੱਚ ਸਮੱਸਿਆ ਆ ਗਈ ਜੀ।"
     });
   }
 });
 
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log("PunjabiAI server running on port " + PORT);
+app.listen(process.env.PORT || 3000, () => {
+  console.log("PunjabiAI server running");
 });
