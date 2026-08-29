@@ -1,56 +1,67 @@
 const express = require("express");
-const cors = require("cors");
-const OpenAI = require("openai");
 const path = require("path");
+const OpenAI = require("openai");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-
-app.use(express.static(__dirname));
-
-// OpenAI connection
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-// AI Chat API
-app.post("/chat", async (req, res) => {
+app.use(express.json());
+app.use(express.static(path.join(__dirname)));
+
+app.post("/api/chat", async (req, res) => {
   try {
     const message = req.body.message;
 
-    if (!message) {
+    if (!message || message.trim() === "") {
       return res.status(400).json({
-        reply: "ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ message ਲਿਖੋ ਜੀ।"
+        error: "ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਸੁਨੇਹਾ ਲਿਖੋ ਜੀ।",
+      });
+    }
+
+    if (!process.env.OPENAI_API_KEY) {
+      console.error("OPENAI_API_KEY missing");
+      return res.status(500).json({
+        error: "OpenAI API key ਨਹੀਂ ਮਿਲੀ।",
       });
     }
 
     const response = await openai.responses.create({
       model: "gpt-5.6-luna",
       instructions: `
-You are PunjabiAI, a helpful and friendly AI assistant.
-You understand Punjabi, English and Hindi.
-When the user speaks Punjabi, reply naturally in Punjabi (Gurmukhi script).
-Be helpful, clear and respectful.
-`,
-      input: message
+ਤੁਸੀਂ PunjabiAI ਨਾਮ ਦੇ ਇੱਕ ਮਦਦਗਾਰ AI Assistant ਹੋ।
+ਹਮੇਸ਼ਾ ਦੋਸਤਾਨਾ ਅਤੇ ਸਧਾਰਨ ਪੰਜਾਬੀ ਵਿੱਚ ਜਵਾਬ ਦਿਓ।
+ਜੇ ਯੂਜ਼ਰ English ਜਾਂ Hindi ਵਿੱਚ ਪੁੱਛੇ ਤਾਂ ਉਸੇ ਭਾਸ਼ਾ ਵਿੱਚ ਵੀ ਜਵਾਬ ਦੇ ਸਕਦੇ ਹੋ।
+ਤੁਹਾਡਾ ਮਕਸਦ ਮਦਦਗਾਰ ਅਤੇ ਸਪੱਸ਼ਟ ਜਵਾਬ ਦੇਣਾ ਹੈ।
+      `,
+      input: message,
     });
 
+    const reply =
+      response.output_text ||
+      "ਮਾਫ ਕਰਨਾ ਜੀ, ਮੈਨੂੰ ਇਸ ਵੇਲੇ ਜਵਾਬ ਨਹੀਂ ਮਿਲਿਆ।";
+
     res.json({
-      reply: response.output_text
+      reply: reply,
     });
 
   } catch (error) {
-    console.error("OpenAI Error:", error);
+    console.error("OPENAI ERROR:", error);
 
     res.status(500).json({
-      reply: "ਮਾਫ ਕਰਨਾ ਜੀ, AI ਨਾਲ connection ਵਿੱਚ ਸਮੱਸਿਆ ਆ ਗਈ।"
+      error: "AI ਨਾਲ connection ਵਿੱਚ ਸਮੱਸਿਆ ਆ ਗਈ।",
+      details: error.message,
     });
   }
 });
 
-const PORT = process.env.PORT || 3000;
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
+
+const PORT = process.env.PORT || 10000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
