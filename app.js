@@ -8,7 +8,15 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Punjabi AI Assistant is running successfully! 🚀"
+    message: "Punjabi AI Assistant is running!"
+  });
+});
+
+app.post("/chat", (req, res) => {
+  const message = req.body.message;
+
+  res.json({
+    reply: `ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ! ਤੁਸੀਂ ਕਿਹਾ: ${message}`
   });
 });
 
