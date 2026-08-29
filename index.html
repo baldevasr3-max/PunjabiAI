@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PunjabiAI Assistant</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 600px;
+      height: 90vh;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .header {
+      background: #5b3cc4;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 24px;
+    }
+
+    .header p {
+      margin-top: 5px;
+      opacity: 0.9;
+    }
+
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-radius: 15px;
+      line-height: 1.5;
+    }
+
+    .bot {
+      background: white;
+      color: #333;
+      border-bottom-left-radius: 3px;
+    }
+
+    .user {
+      background: #5b3cc4;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 3px;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 12px;
+      background: white;
+      border-top: 1px solid #ddd;
+      gap: 10px;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    button {
+      background: #5b3cc4;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #432a9b;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="chat-container">
+
+  <div class="header">
+    <h1>🤖 PunjabiAI Assistant</h1>
+    <p>ਤੁਹਾਡਾ ਆਪਣਾ ਪੰਜਾਬੀ AI ਸਹਾਇਕ</p>
+  </div>
+
+  <div id="chat-box">
+    <div class="message bot">
+      ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ! 🙏 ਮੈਂ PunjabiAI ਹਾਂ। ਮੈਂ ਤੁਹਾਡੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?
+    </div>
+  </div>
+
+  <div class="input-area">
+    <input
+      type="text"
+      id="user-input"
+      placeholder="ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ..."
+    >
+    <button onclick="sendMessage()">➤</button>
+  </div>
+
+</div>
+
+<script>
+function sendMessage() {
+  const input = document.getElementById("user-input");
+  const message = input.value.trim();
+
+  if (message === "") return;
+
+  const chatBox = document.getElementById("chat-box");
+
+  chatBox.innerHTML += `
+    <div class="message user">${message}</div>
+  `;
+
+  input.value = "";
+
+  setTimeout(() => {
+    chatBox.innerHTML += `
+      <div class="message bot">
+        ਤੁਹਾਡਾ ਸੁਨੇਹਾ ਮਿਲ ਗਿਆ ਜੀ 😊 PunjabiAI ਦਾ AI system ਜਲਦੀ connect ਕੀਤਾ ਜਾਵੇਗਾ।
+      </div>
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }, 600);
+}
+
+document.getElementById("user-input")
+.addEventListener("keypress", function(event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+});
+</script>
+
+</body>
+</html>
