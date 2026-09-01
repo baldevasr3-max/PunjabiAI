@@ -1,249 +1,510 @@
 <!DOCTYPE html>
 <html lang="pa">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PunjabiAI Assistant</title>
+  <title>PunjabAI Assistant</title>
 
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
 
-body {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-}
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+    }
 
-.chat-container {
-    width: 100%;
-    max-width: 650px;
-    height: 90vh;
-    background: white;
-    border-radius: 25px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
+    /* LOGIN PAGE */
+    #auth-page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-.header {
-    background: linear-gradient(135deg, #5b3cc4, #6f4db8);
-    color: white;
-    padding: 25px 20px;
-    text-align: center;
-}
+    .auth-box {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      padding: 35px 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+      text-align: center;
+    }
 
-.header h1 {
-    font-size: 28px;
-    margin-bottom: 8px;
-}
+    .auth-box h1 {
+      color: #5b3cc4;
+      margin-bottom: 10px;
+    }
 
-.header p {
-    font-size: 16px;
-    opacity: 0.9;
-}
+    .auth-box p {
+      color: #666;
+      margin-bottom: 25px;
+    }
 
-#chat-box {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    background: #f5f5f5;
-}
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+    }
 
-.message {
-    max-width: 85%;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 18px;
-    line-height: 1.6;
-    font-size: 17px;
-    word-wrap: break-word;
-}
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #5b3cc4;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.bot {
-    background: white;
-    color: #333;
-    border-bottom-left-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
+    .btn:hover {
+      background: #4529a0;
+    }
 
-.user {
-    background: linear-gradient(135deg, #5b3cc4, #6f4db8);
-    color: white;
-    margin-left: auto;
-    border-bottom-right-radius: 5px;
-}
+    .switch {
+      margin-top: 18px;
+      color: #555;
+      cursor: pointer;
+    }
 
-.input-area {
-    display: flex;
-    gap: 10px;
-    padding: 15px;
-    background: white;
-    border-top: 1px solid #ddd;
-}
+    .switch span {
+      color: #5b3cc4;
+      font-weight: bold;
+    }
 
-#user-input {
-    flex: 1;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    font-size: 16px;
-    outline: none;
-}
+    #message {
+      margin-top: 12px;
+      font-size: 14px;
+      color: red;
+    }
 
-#user-input:focus {
-    border-color: #5b3cc4;
-}
+    /* CHAT PAGE */
+    #chat-page {
+      display: none;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
 
-button {
-    width: 55px;
-    height: 55px;
-    border: none;
-    border-radius: 50%;
-    background: #5b3cc4;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #482fa0;
-}
-
-@media (max-width: 500px) {
     .chat-container {
-        height: 95vh;
-        border-radius: 20px;
+      width: 100%;
+      max-width: 650px;
+      height: 90vh;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #5b3cc4, #6f4db8);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
     }
 
     .header h1 {
-        font-size: 24px;
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
+
+    .logout-btn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: white;
+      color: #5b3cc4;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      background: #f5f5f5;
     }
 
     .message {
-        font-size: 16px;
+      max-width: 80%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border-radius: 15px;
+      line-height: 1.5;
+      word-wrap: break-word;
     }
-}
-</style>
+
+    .user-message {
+      background: #5b3cc4;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 3px;
+    }
+
+    .bot-message {
+      background: white;
+      color: #333;
+      margin-right: auto;
+      border-bottom-left-radius: 3px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+    }
+
+    .input-area {
+      display: flex;
+      padding: 12px;
+      background: white;
+      border-top: 1px solid #ddd;
+    }
+
+    #user-input {
+      flex: 1;
+      margin: 0;
+      margin-right: 8px;
+    }
+
+    .send-btn {
+      background: #5b3cc4;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="chat-container">
+  <!-- LOGIN / SIGNUP PAGE -->
+  <div id="auth-page">
 
-    <div class="header">
-        <h1>🤖 PunjabiAI Assistant</h1>
-        <p>ਤੁਹਾਡਾ ਆਪਣਾ ਪੰਜਾਬੀ AI ਸਹਾਇਕ</p>
-    </div>
+    <div class="auth-box">
 
-    <div id="chat-box">
+      <h1>🤖 PunjabAI</h1>
+      <p>ਪੰਜਾਬੀ AI Assistant ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ</p>
 
-        <div class="message bot">
-            ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ! 🙏 ਮੈਂ PunjabiAI ਹਾਂ।<br>
-            ਮੈਂ ਤੁਹਾਡੀ ਕਿਵੇਂ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?
+      <div id="login-form">
+        <input type="email" id="login-email" placeholder="Email Address">
+        <input type="password" id="login-password" placeholder="Password">
+
+        <button class="btn" onclick="loginUser()">Login</button>
+
+        <div class="switch">
+          ਨਵਾਂ Account ਹੈ?
+          <span onclick="showSignup()">Sign Up</span>
         </div>
+      </div>
+
+
+      <div id="signup-form" style="display:none;">
+        <input type="email" id="signup-email" placeholder="Email Address">
+        <input type="password" id="signup-password" placeholder="Password (minimum 6 characters)">
+
+        <button class="btn" onclick="signupUser()">Create Account</button>
+
+        <div class="switch">
+          ਪਹਿਲਾਂ ਹੀ Account ਹੈ?
+          <span onclick="showLogin()">Login</span>
+        </div>
+      </div>
+
+      <div id="message"></div>
 
     </div>
+  </div>
 
-    <div class="input-area">
 
+  <!-- CHAT PAGE -->
+  <div id="chat-page">
+
+    <div class="chat-container">
+
+      <div class="header">
+        <h1>🤖 PunjabAI Assistant</h1>
+        <p>ਪੰਜਾਬੀ ਵਿੱਚ ਕੋਈ ਵੀ ਸਵਾਲ ਪੁੱਛੋ</p>
+        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+      </div>
+
+      <div id="chat-box">
+        <div class="message bot-message">
+          ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ ਜੀ 🙏 ਮੈਂ PunjabAI ਹਾਂ। ਮੈਂ ਤੁਹਾਡੀ ਕੀ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ?
+        </div>
+      </div>
+
+      <div class="input-area">
         <input
-            type="text"
-            id="user-input"
-            placeholder="ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ..."
+          type="text"
+          id="user-input"
+          placeholder="ਆਪਣਾ ਸਵਾਲ ਲਿਖੋ..."
+          onkeypress="handleEnter(event)"
         >
-
-        <button onclick="sendMessage()">➤</button>
+        <button class="send-btn" onclick="sendMessage()">Send</button>
+      </div>
 
     </div>
+  </div>
 
-</div>
 
-<script>
+  <!-- FIREBASE -->
+  <script type="module">
 
-async function sendMessage() {
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    const input = document.getElementById("user-input");
-    const message = input.value.trim();
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    if (message === "") return;
 
-    const chatBox = document.getElementById("chat-box");
+    // =====================================
+    // PASTE YOUR FIREBASE CONFIG HERE
+    // =====================================
 
-    // User message
-    chatBox.innerHTML += `
-        <div class="message user">${message}</div>
-    `;
+    const firebaseConfig = {
 
-    input.value = "";
+      apiKey: "PASTE_YOUR_API_KEY",
 
-    // Loading message
-    const loadingId = "loading-" + Date.now();
+      authDomain: "PASTE_YOUR_AUTH_DOMAIN",
 
-    chatBox.innerHTML += `
-        <div class="message bot" id="${loadingId}">
-            ਸੋਚ ਰਿਹਾ ਹਾਂ... 🤔
-        </div>
-    `;
+      projectId: "PASTE_YOUR_PROJECT_ID",
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+      storageBucket: "PASTE_YOUR_STORAGE_BUCKET",
 
-    try {
+      messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
 
-        const response = await fetch("/api/chat", {
+      appId: "PASTE_YOUR_APP_ID"
+
+    };
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+
+    // SHOW SIGNUP
+    window.showSignup = function() {
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("signup-form").style.display = "block";
+      document.getElementById("message").innerText = "";
+    };
+
+
+    // SHOW LOGIN
+    window.showLogin = function() {
+      document.getElementById("signup-form").style.display = "none";
+      document.getElementById("login-form").style.display = "block";
+      document.getElementById("message").innerText = "";
+    };
+
+
+    // SIGNUP
+    window.signupUser = async function() {
+
+      const email =
+        document.getElementById("signup-email").value;
+
+      const password =
+        document.getElementById("signup-password").value;
+
+      try {
+
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        document.getElementById("message").style.color = "green";
+        document.getElementById("message").innerText =
+          "Account successfully created! 🎉";
+
+      } catch (error) {
+
+        document.getElementById("message").style.color = "red";
+        document.getElementById("message").innerText =
+          error.message;
+
+      }
+    };
+
+
+    // LOGIN
+    window.loginUser = async function() {
+
+      const email =
+        document.getElementById("login-email").value;
+
+      const password =
+        document.getElementById("login-password").value;
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      } catch (error) {
+
+        document.getElementById("message").style.color = "red";
+        document.getElementById("message").innerText =
+          "Login failed: " + error.message;
+
+      }
+    };
+
+
+    // LOGOUT
+    window.logoutUser = async function() {
+
+      try {
+        await signOut(auth);
+      } catch (error) {
+        alert(error.message);
+      }
+
+    };
+
+
+    // AUTH STATE
+    onAuthStateChanged(auth, (user) => {
+
+      if (user) {
+
+        document.getElementById("auth-page").style.display = "none";
+
+        document.getElementById("chat-page").style.display = "flex";
+
+      } else {
+
+        document.getElementById("auth-page").style.display = "flex";
+
+        document.getElementById("chat-page").style.display = "none";
+
+      }
+
+    });
+
+
+    // SEND MESSAGE TO AI
+    window.sendMessage = async function() {
+
+      const input =
+        document.getElementById("user-input");
+
+      const message = input.value.trim();
+
+      if (!message) return;
+
+
+      const chatBox =
+        document.getElementById("chat-box");
+
+
+      chatBox.innerHTML +=
+        `<div class="message user-message">${message}</div>`;
+
+      input.value = "";
+
+
+      chatBox.innerHTML +=
+        `<div class="message bot-message" id="loading">
+          ਸੋਚ ਰਿਹਾ ਹਾਂ... 🤔
+        </div>`;
+
+
+      chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+
+      try {
+
+        const response =
+          await fetch("/api/chat", {
+
             method: "POST",
 
             headers: {
-                "Content-Type": "application/json"
+              "Content-Type": "application/json"
             },
 
             body: JSON.stringify({
-                message: message
+              message: message
             })
-        });
 
-        const data = await response.json();
-
-        const loadingMessage = document.getElementById(loadingId);
-
-        if (data.reply) {
-            loadingMessage.innerText = data.reply;
-        } else {
-            loadingMessage.innerText = "ਕੋਈ ਜਵਾਬ ਨਹੀਂ ਮਿਲਿਆ ਜੀ।";
-        }
-
-    } catch (error) {
-
-        document.getElementById(loadingId).innerText =
-            "ਮਾਫ ਕਰਨਾ ਜੀ, AI ਨਾਲ connection ਵਿੱਚ ਸਮੱਸਿਆ ਆ ਗਈ।";
-
-        console.error(error);
-    }
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
+          });
 
 
-// Enter key support
-document.getElementById("user-input")
-.addEventListener("keypress", function(event) {
+        const data =
+          await response.json();
 
-    if (event.key === "Enter") {
+
+        document.getElementById("loading").remove();
+
+
+        chatBox.innerHTML +=
+          `<div class="message bot-message">
+            ${data.reply}
+          </div>`;
+
+
+      } catch (error) {
+
+        document.getElementById("loading").remove();
+
+
+        chatBox.innerHTML +=
+          `<div class="message bot-message">
+            ਮਾਫ ਕਰਨਾ ਜੀ, ਕੋਈ error ਆ ਗਈ।
+          </div>`;
+
+      }
+
+
+      chatBox.scrollTop =
+        chatBox.scrollHeight;
+
+    };
+
+
+    // ENTER KEY
+    window.handleEnter = function(event) {
+
+      if (event.key === "Enter") {
         sendMessage();
-    }
+      }
 
-});
+    };
 
-</script>
+  </script>
 
 </body>
 </html>
